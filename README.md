@@ -2,4 +2,4 @@
 generalized web scrapper using python &amp; scrapy
 
 # meli-scrapper
-adapted for "Mercado Libre computación"
+adapted, as an example, for "Mercado Libre computación"
