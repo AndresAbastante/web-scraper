@@ -1,52 +1,25 @@
-from gc import callbacks
-import rule
-from scrapy.item import Field
-from scrapy.item import Item
-from scrapy.spiders import CrawlSpider, Rule
-from scrapy.selector import Selector
-from scrapy.loader.processors import MapCompose
-from scrapy.linkextractors import LinkExtractor
-from scrapy.loader import ItemLoader
+from selenium import webdriver
+from bs4 import BeautifulSoup
+import pandas as pd
+import datetime
 
-class article(Item):
-    title = Field ()
-    #price  = Field ()
-    #description = Field ()
+driver = webdriver.Chrome("/opt/homebrew/bin/chromedriver")
+products=[] #List to store name of the product
+prices=[] #List to store price of the product
+ratings=[] #List to store rating of the product 
+driver.get("https://listado.mercadolibre.com.ar/repuestos/407-coupe")
+#driver.get("https://listado.mercadolibre.com.ar/407-coupe_PublishedToday_YES")
 
-class melicrawler(CrawlSpider):
-    name ='mercadolibre'
-    custom_settings = {
-        'USER_AGENT': 'Mozilla/5.0 (X11; Linux x86_64; rv:7.0.1) Gecko/20100101 Firefox/7.7',
-        'CLOSESPIDER_PAGECOUNT': 23,
-    }
+content = driver.page_source
+soup = BeautifulSoup(content, 'html.parser')
 
-    delay = 1
-    allowed_domains = ['computacion.mercadolibre.com.ar','articulo.mercadolibre.com.ar', 'mercadolibre.com.ar', 'listado.mercadolibre.com.ar']
-    start_urls = ['https://computacion.mercadolibre.com.ar/componentes-pc/']
-    
-    rules = (
-        #pages
-        Rule(
-            LinkExtractor(
-                allow=r'/_Desde_'
-                ), follow=True
-        ),
-        #products
-        Rule(
-            LinkExtractor(
-                allow=r'/MLA'
-                ), follow=True, callback='items_parser'
-        ),
-    )
+for a in soup.find_all('div', class_="ui-search-result__content-wrapper"):
+    name=a.find('h2', class_="ui-search-item__title")
+    price=a.find('span', class_="price-tag-text-sr-only")
+    products.append(name.text)
+    prices.append(price.text)
 
-    def textcleanse(self,text):
-        newtext = text.replace('\','').replace('\','').replace('\','').replace('\','').replace('\','').replace('\','')
-    def items_parser(self, response):
-        #sel =  Selector()
-        item = ItemLoader(article(), response, MapCompose(self.textcleanse))
-        item.add_xpath('title','//title/text()')
-        #item.add_xpath('price','')
-        #item.add_xpath('description','')
-
-        yield item.load_item()
-
+dateandtime = datetime.datetime.now()
+excelfilename = "/Users/andresabastante/resultados-excel/resultados repuestos 407 coupe " + dateandtime.strftime("%Y-%m-%d %H:%M:%S")+".csv"
+df = pd.DataFrame({'Producto':products, 'Precio':prices}) 
+df.to_csv(excelfilename, index=False, encoding='utf-8')
