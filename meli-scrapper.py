@@ -29,11 +29,12 @@ if formatcheck==None:
     for i in tqdm (range (1, maxfinds, melipagestep), desc="Fetching..."):
 
         meliurl=url + "_Desde_" + str(i) + "_NoIndex_True"
+        print(meliurl)
         driver.get(meliurl)
         content = driver.page_source
         soup = BeautifulSoup(content, 'html.parser')
         endsearchcheck=soup.find('div', class_="ui-search-rescue__info")
-        
+        print(endsearchcheck)
         if endsearchcheck==None:
             for tag in soup.find_all('div', class_="ui-search-result__wrapper"):
                 name=tag.find('h2', class_="ui-search-item__title")
@@ -45,7 +46,8 @@ if formatcheck==None:
                 prices.append(price.text)
                 links+= [link]
         else:
-            i=maxfinds
+            print("There are no more pages to iterate!")
+            break
 else:
     for i in tqdm (range (1, maxfinds, melipagestep), desc="Fetching..."):
         
@@ -65,7 +67,8 @@ else:
                 prices.append(price.text)
                 links+= [link]
         else:
-            i=maxfinds
+            print("There are no more pages to iterate!")
+            break
 
 dateandtime = datetime.datetime.now()
 #excelfilename = "/Users/andresabastante/resultados-excel/results " + search + " " + dateandtime.strftime("%Y-%m-%d %H:%M:%S")+".csv"
