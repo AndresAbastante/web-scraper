@@ -14,9 +14,9 @@ prices=[]
 links=[]
 melipagestep=50
 
-search=input("Input MeLi search")
+search=input("Input MeLi search: ")
 url="https://listado.mercadolibre.com.ar/" + search
-maxfinds=int(input("Input max desired findings"))
+maxfinds=int(input("Input max desired findings: "))
 
 #MeLi uses different formating depending on which items you are searching for. This checks which format //
 #is currently being used.
@@ -34,7 +34,7 @@ if formatcheck==None:
         content = driver.page_source
         soup = BeautifulSoup(content, 'html.parser')
         endsearchcheck=soup.find('div', class_="ui-search-rescue__info")
-        print(endsearchcheck)
+        
         if endsearchcheck==None:
             for tag in soup.find_all('div', class_="ui-search-result__wrapper"):
                 name=tag.find('h2', class_="ui-search-item__title")
