@@ -34,7 +34,7 @@ if formatcheck==None:
         content = driver.page_source
         soup = BeautifulSoup(content, 'html.parser')
         endsearchcheck=soup.find('div', class_="ui-search-rescue__info")
-        
+
         if endsearchcheck==None:
             for tag in soup.find_all('div', class_="ui-search-result__wrapper"):
                 name=tag.find('h2', class_="ui-search-item__title")
@@ -50,7 +50,7 @@ if formatcheck==None:
             break
 else:
     for i in tqdm (range (1, maxfinds, melipagestep), desc="Fetching..."):
-        
+        print (i)
         meliurl=url + "_Desde_" + str(i) + "_NoIndex_True"
         driver.get(url)
         content = driver.page_source
