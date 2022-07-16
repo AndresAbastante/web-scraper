@@ -29,7 +29,6 @@ if formatcheck==None:
     for i in tqdm (range (1, maxfinds, melipagestep), desc="Fetching..."):
 
         meliurl=url + "_Desde_" + str(i) + "_NoIndex_True"
-        print(meliurl)
         driver.get(meliurl)
         content = driver.page_source
         soup = BeautifulSoup(content, 'html.parser')
@@ -50,7 +49,6 @@ if formatcheck==None:
             break
 else:
     for i in tqdm (range (1, maxfinds, melipagestep), desc="Fetching..."):
-        print (i)
         meliurl=url + "_Desde_" + str(i) + "_NoIndex_True"
         driver.get(url)
         content = driver.page_source
@@ -71,8 +69,7 @@ else:
             break
 
 dateandtime = datetime.datetime.now()
-#excelfilename = "/Users/andresabastante/resultados-excel/results " + search + " " + dateandtime.strftime("%Y-%m-%d %H:%M:%S")+".csv"
-excelfilename = "/Users/andresabastante/resultados-excel/results " + dateandtime.strftime("%Y-%m-%d %H:%M:%S")+".csv"
+excelfilename = "/Users/andresabastante/resultados-excel/meli-scraper-results-" + dateandtime.strftime("%y-%m-%d|%H;%M")+".csv"
 
 df = pd.DataFrame({'Producto':products, 'Precio':prices, 'Link':links})
 df.to_csv(excelfilename, index=False, encoding='utf-8')
