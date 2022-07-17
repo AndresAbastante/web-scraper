@@ -1,4 +1,3 @@
-import sys
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
@@ -10,21 +9,20 @@ from tqdm import tqdm
 chromeoptions=Options()
 chromeoptions.add_argument("--headless")
 driver = webdriver.Chrome("/opt/homebrew/bin/chromedriver", chrome_options=chromeoptions)
-file = open('urls.txt','r')
+file = open('/Users/andresabastante/codigo/web-scrapper/urls.txt','r')
 products=[]
 prices=[]
 links=[]
 melipagestep=50
-maxfinds=int(sys.argv[1])
-print(maxfinds)
+maxfinds=100
 
 for i in file.readlines():
 
     url=i
+    print("Scrapping " + url)
     driver.get(url)
     content = driver.page_source
     soup = BeautifulSoup(content, 'html.parser')
-    #Me-Li format check
     formatcheck=soup.find('a', class_="ui-search-result__content ui-search-link")
 
     if formatcheck==None:
@@ -71,7 +69,8 @@ for i in file.readlines():
 
     dateandtime = datetime.datetime.now()
     excelfilename = "/Users/andresabastante/resultados-excel/meli-scraper-results-" + dateandtime.strftime("%y-%m-%d|%H;%M")+".csv"
-
     df = pd.DataFrame({'Producto':products, 'Precio':prices, 'Link':links})
     df.to_csv(excelfilename, index=False, encoding='utf-8')
-    subprocess.call(['open', excelfilename])
+    
+    if df.empty==False:
+        subprocess.call(['notify', '-bulk', '-i', excelfilename])
