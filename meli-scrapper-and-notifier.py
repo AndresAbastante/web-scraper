@@ -1,4 +1,6 @@
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -8,7 +10,8 @@ from tqdm import tqdm
 
 chromeoptions=Options()
 chromeoptions.add_argument("--headless")
-driver = webdriver.Chrome("/opt/homebrew/bin/chromedriver", chrome_options=chromeoptions)
+chromeoptions.add_argument("--silent")
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chromeoptions)
 file = open('/Users/andresabastante/codigo/web-scrapper/urls.txt','r')
 products=[]
 prices=[]
