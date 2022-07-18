@@ -12,7 +12,7 @@ chromeoptions=Options()
 chromeoptions.add_argument("--headless")
 chromeoptions.add_argument("--silent")
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chromeoptions)
-file = open('/Users/andresabastante/codigo/web-scrapper/urls.txt','r')
+file = open('urls.txt','r')
 products=[]
 prices=[]
 links=[]
@@ -71,7 +71,7 @@ for i in file.readlines():
                 break
 
     dateandtime = datetime.datetime.now()
-    excelfilename = "/Users/andresabastante/resultados-excel/meli-scraper-results-" + dateandtime.strftime("%y-%m-%d|%H;%M")+".csv"
+    excelfilename = "meli-scraper-results-" + dateandtime.strftime("%y-%m-%d %H:%M")+".csv"
     df = pd.DataFrame({'Producto':products, 'Precio':prices, 'Link':links})
     df.to_csv(excelfilename, index=False, encoding='utf-8')
     
