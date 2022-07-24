@@ -58,10 +58,11 @@ for i in file.readlines():
             endsearchcheck=soup.find('div', class_="ui-search-rescue__info")
             
             if endsearchcheck==None:
-                for tag in soup.find_all('a', href=True, class_="ui-search-result__content ui-search-link"):
-                    link=tag['href']
+                for tag in soup.find_all('div', class_="ui-search-result__wrapper"):
                     name=tag.find('h2', class_="ui-search-item__title")
                     price=tag.find('span', class_="price-tag-fraction")
+                    linkclass=tag.find('a', href=True, class_="ui-search-item__group__element ui-search-link")
+                    link=linkclass['href']
             
                     products.append(name.text)
                     prices.append(price.text)
@@ -71,7 +72,7 @@ for i in file.readlines():
                 break
 
     dateandtime = datetime.datetime.now()
-    excelfilename = "meli-scraper-results-" + dateandtime.strftime("%y-%m-%d %H:%M")+".csv"
+    excelfilename = "-scraper-results-" + dateandtime.strftime("%y-%m-%d %H:%M")+".csv"
     df = pd.DataFrame({'Producto':products, 'Precio':prices, 'Link':links})
     df.to_csv(excelfilename, index=False, encoding='utf-8')
     
