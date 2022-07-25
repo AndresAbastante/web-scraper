@@ -29,7 +29,7 @@ for i in file.readlines():
     formatcheck=soup.find('a', class_="ui-search-result__content ui-search-link")
 
     if formatcheck==None:
-        for j in tqdm (range (1, maxfinds, melipagestep), desc="Fetching..."):
+        for j in tqdm (range (1, maxfinds, melipagestep), desc="Scrapping..."):
             meliurl=url + "_Desde_" + str(i) + "_NoIndex_True"
             driver.get(meliurl)
             content = driver.page_source
