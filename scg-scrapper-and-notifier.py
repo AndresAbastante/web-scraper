@@ -21,8 +21,7 @@ conditions=[]
 stocks=[]
 sets=[]
 maxpages=20
-https://starcitygames.com/search/?sort=pricedesc&hawksearchable=search_includetext%3A%20%22default%22&instockonly=Yes&language=Japanese&mpp=96&pg=
-url=''
+url='https://starcitygames.com/search/?sort=pricedesc&hawksearchable=search_includetext%3A%20%22default%22&instockonly=Yes&language=Japanese&mpp=96&pg='
 print('Scrapping SCG Japanese stock')
 
 for j in tqdm (range (1, maxpages), desc='Scrapping...'):
