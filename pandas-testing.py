@@ -1,10 +1,13 @@
 import pandas as pd
 
-df1=pd.read_csv('df1.csv')
+df1=pd.read_csv('mtgpirulo-japanese-stock.csv')
 df2=pd.read_csv('df2.csv')
 df = pd.concat([df1, df2]).reset_index(drop=True)
 df.drop('Unnamed: 0', inplace=True, axis=1)
 df.to_csv('merged')
+
+df_diff = pd.concat([df1,df2]).drop_duplicates(keep=False)
+df_diff.to_csv('asdasd')
 # newdf = pd.DataFrame({'Product':products, 'Price':prices, 'Condition':condition, 'Set':sets, 'Stock':stocks})
 # newdf.to_csv(csvfilename, index=True)
 
