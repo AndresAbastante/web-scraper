@@ -15,6 +15,7 @@ chromeoptions=Options()
 chromeoptions.add_argument('--headless')
 chromeoptions.add_argument('--silent')
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chromeoptions)
+dateandtime = datetime.datetime.now()
 products=[]
 prices=[]
 links=[]
@@ -50,12 +51,14 @@ for j in tqdm (range (29, maxpages), desc='Scrapping...'):
         print('There are no more pages to iterate!')
         break
 
-dateandtime = datetime.datetime.now()
+olddf = pd.read_csv('mtgpirulo-japanese-stock.csv')
 csvfilename = 'mtgpirulo-new-results' + dateandtime.strftime('%y-%m-%d %H:%M') + '.csv'
 newdf = pd.DataFrame({'Product':products, 'Price':prices, 'Condition':condition, 'Set':sets, 'Stock':stocks})
 newdf.to_csv(csvfilename, index=True)
+merged = pd.concat([olddf, newdf]).reset_index(drop=True)
+merged.drop('Unnamed: 0', inplace=True, axis=1)
+merged.to_csv('mtgpirulo-japanese-stock.csv')
 
-#olddf = pd.read_csv('mtgpirulo-new-results.csv')
 #mergeddf.to_csv('merged' + dateandtime.strftime('%y-%m-%d %H:%M') + '.csv')
 
 #subprocess.call(['open', 'merged.csv'])
