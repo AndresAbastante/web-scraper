@@ -1,3 +1,4 @@
+from numpy import true_divide
 from selenium import webdriver
 import re
 from webdriver_manager.chrome import ChromeDriverManager
@@ -31,18 +32,21 @@ for j in tqdm (range (1, maxpages), desc='Scrapping...'):
     soup = BeautifulSoup(content, 'html.parser')
 
     for variants in soup.find_all('div', class_='hawk-results-item'):
-        name=variants.find('div', re.compile('_item_lnk2'))
-        set=variants.find('div', re.compile('item_setLink'))
-        #link=set['href']
-        condition=variants.find('div', class_='hawk-results-item__options-table-cell hawk-results-item__options-table-cell--name childCondition')
+        # name=variants.find('div', re.compile('_item_lnk2'))
+        name=variants.find('h2', class_=('hawk-results-item__title'))
+        findlink=name.find('a', href=True)
+        link='https://starcitygames.com' + findlink['href']
+        set=variants.find('p', class_=('hawk-results-item__category'))
+        condition=(variants.find('div', class_='hawk-results-item__options-table-cell hawk-results-item__options-table-cell--name childCondition').text)[29:-2]
         price=variants.find('div', class_='hawk-results-item__options-table-cell hawk-results-item__options-table-cell--price childAttributes')
-        stock=variants.find('div', class_='hawk-results-item__options-table-cell hawk-results-item__options-table-cell--qty childAttributes')
-        conditions+=[condition]
-        products+=[name]
-        prices+=[price]
-        sets+=[set]
-        stocks+=[stock]
-        #links+=[link]
+        stock=(variants.find('div', class_='hawk-results-item__options-table-cell hawk-results-item__options-table-cell--qty childAttributes').text)[5:]
+        
+        conditions.append(condition)
+        products.append(name.text)
+        prices.append(price.text)
+        sets.append(set.text)
+        stocks.append(stock)
+        links+=[link]
 
-newdf = pd.DataFrame({'Product':products, 'Price':prices, 'Condition':conditions, 'Set':sets, 'Stock':stocks})
-newdf.to_csv('scg-japanese-stock.csv')
+newdf = pd.DataFrame({'Product':products, 'Set':sets, 'Condition':conditions, 'Price':prices, 'Stock':stocks, 'Link':links})
+newdf.to_csv('scg-japanese-stock' + dateandtime.strftime('%y-%m-%d %H:%M') + '.csv')
