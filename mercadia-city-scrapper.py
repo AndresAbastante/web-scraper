@@ -31,15 +31,13 @@ for j in tqdm (range (1, maxpages), desc='Scrapping...'):
     content = driver.page_source
     soup = BeautifulSoup(content, 'html.parser')
 
-    for variants in soup.find_all('div', class_='hawk-results-item'):
-        # name=variants.find('div', re.compile('_item_lnk2'))
-        name=variants.find('h2', class_=('hawk-results-item__title'))
-        findlink=name.find('a', href=True)
-        link='https://starcitygames.com' + findlink['href']
-        set=variants.find('p', class_=('hawk-results-item__category'))
-        condition=(variants.find('div', class_='hawk-results-item__options-table-cell hawk-results-item__options-table-cell--name childCondition').text)[29:-2]
-        price=variants.find('div', class_='hawk-results-item__options-table-cell hawk-results-item__options-table-cell--price childAttributes')
-        stock=(variants.find('div', class_='hawk-results-item__options-table-cell hawk-results-item__options-table-cell--qty childAttributes').text)[5:]
+    for variants in soup.find_all('div', class_='product details product-item-details'):
+        name=variants.find('a', href=True, class_=('product-item-link'))
+        link=name['href']
+        condition=variants.find('div', class_='product description product-item-description')
+        price=variants.find('span', class_='price')
+        stockfilter=variants.find('div', class_='aw-cus__customstockstatus')
+        stock=(stockfilter.find('div', class_='text').text)[6:]
         
         conditions.append(condition)
         products.append(name.text)
@@ -49,4 +47,4 @@ for j in tqdm (range (1, maxpages), desc='Scrapping...'):
         links+=[link]
 
 newdf = pd.DataFrame({'Product':products, 'Set':sets, 'Condition':conditions, 'Price':prices, 'Stock':stocks, 'Link':links})
-newdf.to_csv('scg-japanese-stock.csv')
+newdf.to_csv('Mercadia-City-japanese-stock.csv')

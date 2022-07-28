@@ -12,7 +12,7 @@ chromeoptions=Options()
 chromeoptions.add_argument("--headless")
 chromeoptions.add_argument("--silent")
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chromeoptions)
-file = open('urls.txt','r')
+file = open('meli-urls.txt','r')
 products=[]
 prices=[]
 links=[]
