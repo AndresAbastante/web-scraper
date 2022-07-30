@@ -21,8 +21,6 @@ links=[]
 conditions=[]
 stocks=[]
 sets=[]
-#maxpages=20
-#file = open('meli-urls.txt','r')
 
 print('Scrapping MercadiaCity Japanese stock')
 
