@@ -29,8 +29,7 @@ for j in tqdm (range (1, maxpages), desc='Scrapping...'):
     content = driver.page_source
     soup = BeautifulSoup(content, 'html.parser')
     endsearchcheck=soup.find('p', class_='no-product')
-    endsearchcheck=soup.find('p', class_='no-product')
-    
+
     if endsearchcheck==None:
         for variants in soup.find_all('div', class_='variant-row row'):
             stock=(variants.find('span', class_='variant-short-info variant-qty').text)[66:-71]
