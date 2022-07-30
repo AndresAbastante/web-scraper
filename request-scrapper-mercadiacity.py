@@ -24,7 +24,6 @@ with open('mercadia-city-urls.txt','r') as f:
             response = (requests.get(finalurl, headers)).text
             soup = BeautifulSoup(response, 'html.parser')
             endsearchcheck=soup.find('div', class_='message info empty')
-            
             if endsearchcheck==None:
                 for variants in soup.find_all('div', class_='product details product-item-details'):
                     name=variants.find('a', href=True, class_=('product-item-link'))
