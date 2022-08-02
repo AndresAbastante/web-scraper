@@ -4,7 +4,9 @@ import pandas as pd
 from tqdm import tqdm
 import time
 
-elapsedtime = time.time()
+print('Scrapping MercadiaCity Japanese stock')
+
+elapsedseconds = time.time()
 requestheaders = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36'}
 products=[]
 prices=[]
@@ -12,11 +14,9 @@ links=[]
 conditions=[]
 stocks=[]
 sets=[]
-maxpages=100
-
-print('Scrapping MercadiaCity Japanese stock')
-
+maxpages=2
 urlnumber = sum(1 for line in open('mercadia-city-urls.txt','r'))
+
 with open('mercadia-city-urls.txt','r') as f:
     for url in tqdm(f, total=urlnumber, desc='Scrapping sites...'):
         
@@ -31,13 +31,13 @@ with open('mercadia-city-urls.txt','r') as f:
                     link=name['href']
                     name=(name.text)[9:-7]
                     condition=(variants.find('div', class_='product description product-item-description').text)[8:-6]
-                    price=variants.find('span', class_='price')
-                    stock=(variants.find('div', class_='aw-cus__customstockstatus').text)
+                    price=(variants.find('span', class_='price').text)
+                    stock=variants.find('span', class_='text')
 
                     conditions.append(condition)
                     products.append(name)
-                    prices.append(price.text)
-                    stocks.append(stock)
+                    prices.append(price)
+                    stocks.append(stock.text)
                     links+=[link]
             else:
                 print('No more pages to iterate!')
@@ -45,5 +45,6 @@ with open('mercadia-city-urls.txt','r') as f:
 
 newdf = pd.DataFrame({'Product':products, 'Condition':conditions, 'Price':prices, 'Stock':stocks, 'Link':links})
 newdf.to_csv('Mercadia-City-japanese-stock.csv')
-elapsedtime = time.time() - elapsedtime
-print('Elapsed time: ' + str(int(elapsedtime)) + ' seconds.')
+elapsedseconds = time.time() - elapsedseconds
+elapsedminutes = elapsedseconds / 60
+print('Elapsed time: ' + str(int(elapsedseconds)) + ' seconds (' + elapsedminutes + ' minutes).')
