@@ -5,7 +5,7 @@ from tqdm import tqdm
 import time
 
 elapsedtime = time.time()
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36'}
+requestheaders = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36'}
 products=[]
 prices=[]
 links=[]
@@ -19,9 +19,10 @@ print('Scrapping MercadiaCity Japanese stock')
 urlnumber = sum(1 for line in open('mercadia-city-urls.txt','r'))
 with open('mercadia-city-urls.txt','r') as f:
     for url in tqdm(f, total=urlnumber, desc='Scrapping sites...'):
+        
         for page in tqdm (range (1, maxpages), desc='Scrapping pages... '):
             finalurl= url + '&p=' + str(page)
-            response = (requests.get(finalurl, headers)).text
+            response = (requests.get(finalurl, requestheaders)).text
             soup = BeautifulSoup(response, 'html.parser')
             endsearchcheck=soup.find('div', class_='message info empty')
             if endsearchcheck==None:
@@ -45,4 +46,4 @@ with open('mercadia-city-urls.txt','r') as f:
 newdf = pd.DataFrame({'Product':products, 'Condition':conditions, 'Price':prices, 'Stock':stocks, 'Link':links})
 newdf.to_csv('Mercadia-City-japanese-stock.csv')
 elapsedtime = time.time() - elapsedtime
-print('Elapsed time: ' + elapsedtime)
+print('Elapsed time: ' + str(int(elapsedtime)) + ' seconds.')
