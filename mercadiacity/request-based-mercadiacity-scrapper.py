@@ -41,7 +41,7 @@ with open('mercadia-city-urls.txt','r') as f:
                 print('No more pages to iterate!')
                 break
 
-newdf = pd.DataFrame({'Product':products, 'Condition':conditions, 'Stock':stocks, 'Link':links})
+newdf = pd.DataFrame({'Product':products, 'Price':prices, 'Condition':conditions, 'Link':links})
 newdf.to_csv('Mercadia-City-japanese-stock.csv')
 elapsedseconds = time.time() - elapsedseconds
-print('Elapsed time: ' + str(int(elapsedseconds)) + ' seconds (' + elapsedseconds/60 + ' minutes).')
+print('Elapsed time: ' + str(int(elapsedseconds)) + ' seconds (' + str(elapsedseconds/60) + ' minutes).')
