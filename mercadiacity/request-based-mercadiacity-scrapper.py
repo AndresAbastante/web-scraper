@@ -14,7 +14,7 @@ links=[]
 conditions=[]
 stocks=[]
 sets=[]
-maxpages=2
+maxpages=100
 urlnumber = sum(1 for line in open('mercadia-city-urls.txt','r'))
 
 with open('mercadia-city-urls.txt','r') as f:
@@ -32,19 +32,16 @@ with open('mercadia-city-urls.txt','r') as f:
                     name=(name.text)[9:-7]
                     condition=(variants.find('div', class_='product description product-item-description').text)[8:-6]
                     price=(variants.find('span', class_='price').text)
-                    stock=variants.find('span', class_='text')
-
+                    
                     conditions.append(condition)
                     products.append(name)
                     prices.append(price)
-                    stocks.append(stock.text)
                     links+=[link]
             else:
                 print('No more pages to iterate!')
                 break
 
-newdf = pd.DataFrame({'Product':products, 'Condition':conditions, 'Price':prices, 'Stock':stocks, 'Link':links})
+newdf = pd.DataFrame({'Product':products, 'Condition':conditions, 'Stock':stocks, 'Link':links})
 newdf.to_csv('Mercadia-City-japanese-stock.csv')
 elapsedseconds = time.time() - elapsedseconds
-elapsedminutes = elapsedseconds / 60
-print('Elapsed time: ' + str(int(elapsedseconds)) + ' seconds (' + elapsedminutes + ' minutes).')
+print('Elapsed time: ' + str(int(elapsedseconds)) + ' seconds (' + elapsedseconds/60 + ' minutes).')
