@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from tqdm import tqdm
 import time
+import subprocess
 
 elapsedseconds=time.time()
 requestheaders={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36'}
@@ -38,7 +39,9 @@ with open('meli-urls.txt','r') as f:
                 break
         temporarydf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
         filename=url.replace('https://','').replace('/','-')+'.csv'
-        temporarydf.to_csv(filename)
+        if temporarydf.empty==False:
+            temporarydf.to_csv(filename)
+            subprocess.call(['notify', '-bulk', '-i', filename])
         products.clear()
         prices.clear()
         links.clear()
