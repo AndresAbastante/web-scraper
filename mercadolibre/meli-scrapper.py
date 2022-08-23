@@ -38,7 +38,7 @@ with open('meli-urls.txt','r') as f:
                 print('No more pages to iterate!')
                 break
         temporarydf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
-        filename=url.replace('https://','').replace('/','-')+'.csv'
+        filename=url.replace('https://','').replace('/','-').replace('\n','-')+'.csv'
         if temporarydf.empty==False:
             temporarydf.to_csv(filename)
             subprocess.call(['notify', '-bulk', '-i', filename])
