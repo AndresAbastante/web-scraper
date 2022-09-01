@@ -28,7 +28,9 @@ with open('meli-urls.txt','r') as f:
                     price=variants.find('span', class_='price-tag-fraction')
                     linkclass=variants.find('a', href=True, class_='ui-search-result__content ui-search-link')
                     if linkclass==None:
-                         linkclass=variants.find('a', href=True, class_='ui-search-item__group__element ui-search-link')
+                        linkclass=variants.find('a', href=True, class_='ui-search-link')
+                        if linkclass==None:
+                            linkclass=variants.find('a', href=True, class_='ui-search-item__group__element ui-search-link')
                     link=linkclass['href']
                     products.append(name.text)
                     prices.append(price.text)
@@ -40,7 +42,7 @@ with open('meli-urls.txt','r') as f:
         filename=url.replace('https://','').replace('/','-')+'.csv'
         if temporarydf.empty==False:
             temporarydf.to_csv(filename)
-            subprocess.call(['notify', '-bulk', '-i', filename])
+            # subprocess.call(['notify', '-bulk', '-i', filename])
         products.clear()
         prices.clear()
         links.clear()
