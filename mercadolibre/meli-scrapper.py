@@ -42,7 +42,7 @@ with open('meli-urls.txt','r') as f:
         filename=url.replace('https://','').replace('/','-')+'.csv'
         if temporarydf.empty==False:
             temporarydf.to_csv(filename)
-            # subprocess.call(['notify', '-bulk', '-i', filename])
+            subprocess.call(['notify', '-bulk', '-i', filename])
         products.clear()
         prices.clear()
         links.clear()
