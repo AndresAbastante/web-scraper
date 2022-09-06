@@ -1,3 +1,4 @@
+from re import S
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -17,6 +18,11 @@ urlnumber=sum(1 for line in open('meli-urls.txt','r'))
 with open('meli-urls.txt','r') as f:
     for url in tqdm(f, total=urlnumber, desc='Scraping sites...'):
         print('Scraping ' + url)
+        response=(requests.get(url, requestheaders)).text
+        soup=BeautifulSoup(response, 'html.parser')
+        singlepagecheck=soup.find('a', class_='andes-pagination')
+        if singlepagecheck==None:
+            maxitems=49
         for pages in tqdm (range (1, maxitems, meliitemsstep), desc='Scraping pages... '):
             finalurl=url + '_Desde_' + str(pages)
             response=(requests.get(finalurl, requestheaders)).text
