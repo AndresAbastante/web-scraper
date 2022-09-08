@@ -11,25 +11,26 @@ requestheaders={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe
 products=[]
 prices=[]
 links=[]
-maxitems=1000
 meliitemsstep=49
 urlnumber=sum(1 for line in open('meli-urls.txt','r'))
 
+def html_response_into_soup(url,requestheaders):
+    response=(requests.get(url, requestheaders)).text
+    soup=BeautifulSoup(response, 'html.parser')
+    return soup
+
 with open('meli-urls.txt','r') as f:
+    maxitems=1000
     for url in tqdm(f, total=urlnumber, desc='Scraping sites...'):
         print('Scraping ' + url)
-        response=(requests.get(url, requestheaders)).text
-        soup=BeautifulSoup(response, 'html.parser')
-        singlepagecheck=soup.find('a', class_='andes-pagination')
+        singlepagecheck=html_response_into_soup(url,requestheaders).find('a', class_='andes-pagination')
         if singlepagecheck==None:
             maxitems=49
         for pages in tqdm (range (1, maxitems, meliitemsstep), desc='Scraping pages... '):
-            finalurl=url + '_Desde_' + str(pages)
-            response=(requests.get(finalurl, requestheaders)).text
-            soup=BeautifulSoup(response, 'html.parser')
-            endsearchcheck=soup.find('div', class_='ui-search-rescue__info')
+            url=url + '_Desde_' + str(pages)
+            endsearchcheck=html_response_into_soup(url,requestheaders).find('div', class_='ui-search-rescue__info')
             if endsearchcheck==None:
-                for variants in soup.find_all('div', class_='ui-search-result__wrapper'):
+                for variants in html_response_into_soup(url,requestheaders).find_all('div', class_='ui-search-result__wrapper'):
                     name=variants.find('h2', class_='ui-search-item__title')
                     price=variants.find('span', class_='price-tag-fraction')
                     linkclass=variants.find('a', href=True, class_='ui-search-result__content ui-search-link')
@@ -42,7 +43,7 @@ with open('meli-urls.txt','r') as f:
                     prices.append(price.text)
                     links += [link]
             else:
-                print('No more pages to iterate!')
+                print('***No results found!***')
                 break
         temporarydf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
         filename=url.replace('https://','').replace('/','-').replace('\n','-')+'.csv'
