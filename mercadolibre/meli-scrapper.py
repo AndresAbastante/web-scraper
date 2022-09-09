@@ -23,13 +23,13 @@ with open('meli-urls.txt','r') as f:
     maxitems=1000
     for url in tqdm(f, total=urlnumber, desc='Scraping sites...'):
         print('Scraping ' + url)
-        singlepagecheck=html_response_into_soup(url,requestheaders).find('a', class_='andes-pagination')
-        if singlepagecheck==None:
-            maxitems=49
-        for pages in tqdm (range (1, maxitems, meliitemsstep), desc='Scraping pages... '):
-            url=url + '_Desde_' + str(pages)
-            endsearchcheck=html_response_into_soup(url,requestheaders).find('div', class_='ui-search-rescue__info')
-            if endsearchcheck==None:
+        noresultscheck=html_response_into_soup(url,requestheaders).find('div', class_='ui-search-rescue__info')
+        if noresultscheck==None:
+            singlepagecheck=html_response_into_soup(url,requestheaders).find('a', class_='andes-pagination')
+            if singlepagecheck==None:
+                maxitems=49
+            for pages in tqdm (range (1, maxitems, meliitemsstep), desc='Scraping pages... '):
+                url=url + '_Desde_' + str(pages)
                 for variants in html_response_into_soup(url,requestheaders).find_all('div', class_='ui-search-result__wrapper'):
                     name=variants.find('h2', class_='ui-search-item__title')
                     price=variants.find('span', class_='price-tag-fraction')
@@ -42,16 +42,15 @@ with open('meli-urls.txt','r') as f:
                     products.append(name.text)
                     prices.append(price.text)
                     links += [link]
-            else:
-                print('***No results found!***')
-                break
         temporarydf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
         filename=url.replace('https://','').replace('/','-').replace('\n','-')+'.csv'
         if temporarydf.empty==False:
             temporarydf.to_csv(filename)
             #subprocess.call(['notify', '-bulk', '-i', filename])
+        else:
+            print('***No results were found!***')
         products.clear()
         prices.clear()
         links.clear()
 elapsedseconds=time.time() - elapsedseconds
-print('Elapsed time: ' + str(int(elapsedseconds)) + ' seconds (' + str(elapsedseconds/60) + ' minutes).')        
+print('Elapsed time: ' + str(int(elapsedseconds)) + ' seconds (' + str(elapsedseconds/60) + ' minutes).')
