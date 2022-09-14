@@ -42,6 +42,6 @@ for page in tqdm (range (1, maxpages), desc='Scrapping pages... '):
                 break
 
 newdf = pd.DataFrame({'Product':products, 'Price':prices, 'Condition':conditions, 'Set':sets, 'Link':links})
-newdf.to_csv('MTGPirulo-japanese-stock.csv')
+newdf.to_csv('MTGPirulo-japanese-stock.csv', index=False)
 elapsedseconds = time.time() - elapsedseconds
 print('Elapsed time: ' + str(int(elapsedseconds)) + ' seconds (' + str(elapsedseconds/60) + ' minutes).')

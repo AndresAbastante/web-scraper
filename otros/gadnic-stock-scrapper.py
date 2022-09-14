@@ -30,7 +30,7 @@ for pages in tqdm (range (1, maxitems), desc='Scraping pages... '):
 
 temporarydf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
 filename=url.replace('https://','').replace('/','-')+'.csv'
-temporarydf.to_csv(filename)
+temporarydf.to_csv(filename, index=False)
 products.clear()
 prices.clear()
 links.clear()

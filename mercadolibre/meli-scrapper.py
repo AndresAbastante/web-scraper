@@ -5,6 +5,8 @@ import pandas as pd
 from tqdm import tqdm
 import time
 import subprocess
+from os.path import exists
+import os
 
 elapsedseconds=time.time()
 requestheaders={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36'}
@@ -13,7 +15,7 @@ prices=[]
 links=[]
 meliitemsstep=49
 urlnumber=sum(1 for line in open('meli-urls.txt','r'))
-
+dfheader=['Product', 'Price', 'Link']
 def html_response_into_soup(url,requestheaders):
     response=(requests.get(url, requestheaders)).text
     soup=BeautifulSoup(response, 'html.parser')
@@ -42,15 +44,35 @@ with open('meli-urls.txt','r') as f:
                     products.append(name.text)
                     prices.append(price.text)
                     links += [link]
-        temporarydf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
-        filename=url.replace('https://','').replace('/','-').replace('\n','-')+'.csv'
-        if temporarydf.empty==False:
-            temporarydf.to_csv(filename)
-            #subprocess.call(['notify', '-bulk', '-i', filename])
+
+                filename=url.replace('https://','').replace('/','-').replace('\n','-')+'.csv'
+                tempdf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
+                tempdffilename='new-' + filename
+                if exists(filename):
+                    print('***There is a previous input***')
+                    olddf=pd.read_csv(filename, dtype={"Price":"string"})
+                    tempdf.to_csv(tempdffilename, index=False, columns=dfheader)
+                    newdf=pd.read_csv(tempdffilename, dtype={"Price":"string"})
+                    mergeddf=pd.merge(olddf, newdf, on=['Product', 'Price'], how="right", indicator="Exist")
+                    print(mergeddf)
+                    highlights=mergeddf.query("Exist == 'right_only'")
+                    if highlights.empty:
+                        print('***There were no changes since last iteration***')
+                    else:
+                        print("***There were new items found since last iteration***")
+                        highlights.to_csv('new_items.csv' + filename, index=False, columns=dfheader)
+                        subprocess.call(['notify', '-bulk', '-i', 'new_items.csv'])
+                        mergeddf.to_csv(filename, index=False, columns=dfheader)
+                        os.remove('new_items.csv')
+                    os.remove(tempdffilename)
+                else:
+                    print('***There was not a previous input***')
+                    tempdf.to_csv(filename, index=False, columns=dfheader)
+                    #subprocess.call(['notify', '-bulk', '-i', filename])
+                products.clear()
+                prices.clear()
+                links.clear()
         else:
             print('***No results were found!***')
-        products.clear()
-        prices.clear()
-        links.clear()
 elapsedseconds=time.time() - elapsedseconds
 print('Elapsed time: ' + str(int(elapsedseconds)) + ' seconds (' + str(elapsedseconds/60) + ' minutes).')

@@ -49,4 +49,4 @@ for j in tqdm (range (1, maxpages), desc='Scrapping...'):
         links+=[link]
 
 newdf = pd.DataFrame({'Product':products, 'Set':sets, 'Condition':conditions, 'Price':prices, 'Stock':stocks, 'Link':links})
-newdf.to_csv('scg-japanese-stock.csv')
+newdf.to_csv('scg-japanese-stock.csv', index=False)
