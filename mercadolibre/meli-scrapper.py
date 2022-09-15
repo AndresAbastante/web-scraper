@@ -54,21 +54,24 @@ with open('meli-urls.txt','r') as f:
                     tempdf.to_csv(tempdffilename, index=False, columns=dfheader)
                     newdf=pd.read_csv(tempdffilename, dtype={"Price":"string"})
                     mergeddf=pd.merge(olddf, newdf, on=['Product', 'Price'], how="right", indicator="Exist")
-                    print(mergeddf)
                     highlights=mergeddf.query("Exist == 'right_only'")
                     if highlights.empty:
-                        print('***There were no changes since last iteration***')
+                        print('***There were no changes since the last iteration***')
                     else:
                         print("***There were new items found since last iteration***")
-                        highlights.to_csv('new_items.csv' + filename, index=False, columns=dfheader)
-                        subprocess.call(['notify', '-bulk', '-i', 'new_items.csv'])
+                        highlights.drop(highlights.columns[[2, 4]], axis=1, inplace=True)
+                        highlights.columns=dfheader
+                        highlights.to_csv('new_items.csv', index=False, columns=dfheader)
+                        mergeddf.drop(mergeddf.columns[[2, 4]], axis=1, inplace=True)
+                        mergeddf.columns=dfheader
                         mergeddf.to_csv(filename, index=False, columns=dfheader)
+                        subprocess.call(['notify', '-bulk', '-i', 'new_items.csv'])
                         os.remove('new_items.csv')
                     os.remove(tempdffilename)
                 else:
                     print('***There was not a previous input***')
-                    tempdf.to_csv(filename, index=False, columns=dfheader)
-                    #subprocess.call(['notify', '-bulk', '-i', filename])
+                    tempdf.to_csv(filename, index=False)
+                    subprocess.call(['notify', '-bulk', '-i', filename])
                 products.clear()
                 prices.clear()
                 links.clear()
