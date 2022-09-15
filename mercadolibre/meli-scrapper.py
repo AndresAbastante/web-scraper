@@ -16,6 +16,7 @@ links=[]
 meliitemsstep=49
 urlnumber=sum(1 for line in open('meli-urls.txt','r'))
 dfheader=['Product', 'Price', 'Link']
+
 def html_response_into_soup(url,requestheaders):
     response=(requests.get(url, requestheaders)).text
     soup=BeautifulSoup(response, 'html.parser')
@@ -40,7 +41,7 @@ with open('meli-urls.txt','r') as f:
                         linkclass=variants.find('a', href=True, class_='ui-search-link')
                         if linkclass==None:
                             linkclass=variants.find('a', href=True, class_='ui-search-item__group__element ui-search-link')
-                    link=linkclass['href']
+                    link=linkclass['href'].split('#',1)[0]
                     products.append(name.text)
                     prices.append(price.text)
                     links += [link]
@@ -49,33 +50,30 @@ with open('meli-urls.txt','r') as f:
                 tempdf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
                 tempdffilename='new-' + filename
                 if exists(filename):
-                    print('***There is a previous input***')
-                    olddf=pd.read_csv(filename, dtype={"Price":"string"})
-                    tempdf.to_csv(tempdffilename, index=False, columns=dfheader)
-                    newdf=pd.read_csv(tempdffilename, dtype={"Price":"string"})
-                    mergeddf=pd.merge(olddf, newdf, on=['Product', 'Price'], how="right", indicator="Exist")
-                    highlights=mergeddf.query("Exist == 'right_only'")
+                    olddf=pd.read_csv(filename, dtype={'Price':'string'})
+                    tempdf.to_csv(tempdffilename, index=False)
+                    newdf=pd.read_csv(tempdffilename, dtype={'Price':'string'})
+                    mergeddf=olddf.merge(newdf, how='right', indicator='Exists')
+                    highlights=mergeddf.query("Exists == 'right_only'")
                     if highlights.empty:
-                        print('***There were no changes since the last iteration***')
+                        print('*** No new items found D: ***')
                     else:
-                        print("***There were new items found since last iteration***")
-                        highlights.drop(highlights.columns[[2, 4]], axis=1, inplace=True)
-                        highlights.columns=dfheader
-                        highlights.to_csv('new_items.csv', index=False, columns=dfheader)
-                        mergeddf.drop(mergeddf.columns[[2, 4]], axis=1, inplace=True)
-                        mergeddf.columns=dfheader
-                        mergeddf.to_csv(filename, index=False, columns=dfheader)
+                        print('*** New items found! :D ***')
+                        highlights.drop('Exists', axis=1, inplace=True)
+                        highlights.to_csv('new_items.csv', index=False)
+                        mergeddf.drop('Exists', axis=1, inplace=True)
+                        mergeddf.to_csv(filename, index=False)
                         subprocess.call(['notify', '-bulk', '-i', 'new_items.csv'])
                         os.remove('new_items.csv')
                     os.remove(tempdffilename)
                 else:
-                    print('***There was not a previous input***')
+                    print('*** New items found! :D ***')
                     tempdf.to_csv(filename, index=False)
                     subprocess.call(['notify', '-bulk', '-i', filename])
                 products.clear()
                 prices.clear()
                 links.clear()
         else:
-            print('***No results were found!***')
+            print('*** No items listed! :O ***')
 elapsedseconds=time.time() - elapsedseconds
-print('Elapsed time: ' + str(int(elapsedseconds)) + ' seconds (' + str(elapsedseconds/60) + ' minutes).')
+print('Elapsed time: ' + str(int(elapsedseconds)) + ' seconds (' + str(round(elapsedseconds/60,2)) + ' minutes).')
