@@ -21,14 +21,14 @@ def html_response_into_soup(url,requestheaders):
     return soup
 
 with open('meli-urls.txt','r') as f:
-    maxitems=150
+    maxitems=200
     for url in tqdm(f, total=urlnumber, desc='Scraping sites...'):
-        print('\nScraping ' + url)
+        print('Scraping ' + url)
         noresultscheck=html_response_into_soup(url,requestheaders).find('div', class_='ui-search-rescue__info')
         if noresultscheck==None:
             singlepagecheck=html_response_into_soup(url,requestheaders).find('li', class_='andes-pagination__page-count')
             if singlepagecheck==None:
-                maxitems=49
+                maxitems=48
             for pages in tqdm (range (1, maxitems, meliitemsstep), desc='Scraping pages... '):
                 newurl=url + '_Desde_' + str(pages)
                 for variants in html_response_into_soup(newurl,requestheaders).find_all('div', class_='ui-search-result__wrapper'):
