@@ -61,7 +61,7 @@ with open('meli-urls.txt','r') as f:
                     mergeddf.drop('Exists', axis=1, inplace=True)
                     mergeddf.to_csv(filename, index=False)
                     subprocess.call(['notify', '-bulk', '-i', 'new_items.csv'])
-                    #os.remove('new_items.csv')
+                    os.remove('new_items.csv')
                 os.remove(tempdffilename)
             else:
                 print('\n*** New items found! :D ***')
