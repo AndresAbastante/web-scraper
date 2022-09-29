@@ -1,8 +1,9 @@
-https://mercadiacity.com/index.php/legacy-sets.html?idioma=japones&product_list_dir=desc&product_list_order=price
-https://mercadiacity.com/index.php/masters-sets.html?idioma=japones&product_list_dir=desc&product_list_order=price
-https://mercadiacity.com/index.php/modern-sets.html?idioma=japones&product_list_dir=desc&product_list_order=price
-https://mercadiacity.com/index.php/pioneer-sets.html?idioma=japones&product_list_dir=desc&product_list_order=price
-https://mercadiacity.com/index.php/reprint-sets.html?idioma=japones&product_list_dir=desc&product_list_order=price
-https://mercadiacity.com/index.php/special-sets.html?idioma=japones&product_list_dir=desc&product_list_order=price
-https://mercadiacity.com/index.php/beginner-sets.html?idioma=japones&product_list_dir=desc&product_list_order=price
-https://mercadiacity.com/index.php/core-set-editions.html?idioma=japones&product_list_dir=desc&product_list_order=price
+https://mercadiacity.com/index.php/catalog/category/view/s/masters-sets/id/3516/?idioma=japones&product_list_dir=desc&product_list_order=price
+https://mercadiacity.com/index.php/catalog/category/view/s/modern-sets/id/3526/?idioma=japones&product_list_dir=desc&product_list_order=price
+https://mercadiacity.com/index.php/catalog/category/view/s/pioneer-sets/id/3566/?idioma=japones&product_list_dir=desc&product_list_order=price
+https://mercadiacity.com/index.php/catalog/category/view/s/reprint-sets/id/3665/?idioma=japones&product_list_dir=desc&product_list_order=price
+https://mercadiacity.com/index.php/catalog/category/view/s/special-sets/id/3686/?idioma=japones&product_list_dir=desc&product_list_order=price
+https://mercadiacity.com/index.php/catalog/category/view/s/commander-0/id/3404/?idioma=japones&product_list_dir=desc&product_list_order=price
+https://mercadiacity.com/index.php/catalog/category/view/s/beginner-sets/id/3399/?idioma=japones&product_list_dir=desc&product_list_order=price
+https://mercadiacity.com/index.php/catalog/category/view/s/core-set-editions/id/3419/?idioma=japones&product_list_dir=desc&product_list_order=price
+https://mercadiacity.com/index.php/catalog/category/view/s/legacy-sets/id/3476/?idioma=japones&product_list_dir=desc&product_list_order=price

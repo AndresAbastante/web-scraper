@@ -12,7 +12,7 @@ links=[]
 conditions=[]
 stocks=[]
 sets=[]
-maxpages=25
+maxpages=15
 urlnumber = sum(1 for line in open('mercadia-city-urls.txt','r'))
 print('Scrapping MercadiaCity Japanese stock')
 

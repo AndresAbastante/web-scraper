@@ -1,4 +1,5 @@
 from re import S
+import tempfile
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -45,7 +46,8 @@ with open('meli-urls.txt','r') as f:
                     links += [link]
             filename=url.replace('https://','').replace('/','-').replace('\n','')+'.csv'
             tempdf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
-            tempdffilename='new-' + filename
+            tempdffilename=(f'new-{filename}')
+            print(tempdffilename)
             if exists(filename):
                 olddf=pd.read_csv(filename, dtype={'Product':'string','Price':'string','Link':'string'})
                 tempdf.to_csv(tempdffilename, index=False)
