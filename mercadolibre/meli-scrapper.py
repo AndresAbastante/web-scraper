@@ -43,7 +43,7 @@ with open('meli-urls.txt','r') as f:
                     products.append(name.text)
                     prices.append(price.text)
                     links += [link]
-            filename=url.replace('https://','').replace('/','-').replace('\n','')+'.csv'
+            filename=url.replace('https://','').replace('/','-').replace('?','-').replace('\n','')+'.csv'
             tempdf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
             tempdffilename=(f'new-{filename}')
             print(tempdffilename)
