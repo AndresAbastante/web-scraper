@@ -30,7 +30,7 @@ with open('meli-urls.txt','r') as f:
             for variants in html_response_into_soup(url,requestheaders).find_all('a', href=True, class_='promotion-item__link-container'):
                 name=variants.find('p', class_='promotion-item__title')
                 price=variants.find('span', class_='promotion-item__price')
-                link=variants['href']
+                link=variants['href'].split('#',1)[0]
                 products.append(name.text)
                 prices.append(price.text)
                 links += [link]
@@ -70,7 +70,7 @@ with open('meli-urls.txt','r') as f:
                     highlights.to_csv('new_items.csv', index=False)
                     mergeddf.drop('Exists', axis=1, inplace=True)
                     mergeddf.to_csv(filename, index=False)
-                    subprocess.call(['notify', '-bulk', '-i', 'new_items.csv'])
+                    subprocess.call(['notify', '-silent', '-bulk', '-i', 'new_items.csv'])
                     os.remove('new_items.csv')
                 os.remove(tempdffilename)
             else:
