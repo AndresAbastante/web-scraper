@@ -55,7 +55,6 @@ with open('meli-urls.txt','r') as f:
             filename=url.replace('https://','').replace('/','-').replace('?','-').replace('\n','')+'.csv'
             tempdf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
             tempdffilename=(f'new-{filename}')
-            print(tempdffilename)
             if exists(filename):
                 olddf=pd.read_csv(filename, dtype={'Product':'string','Price':'string','Link':'string'})
                 tempdf.to_csv(tempdffilename, index=False)
