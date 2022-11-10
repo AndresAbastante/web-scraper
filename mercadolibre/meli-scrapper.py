@@ -32,7 +32,7 @@ with open('meli-urls.txt','r') as f:
                 price=variants.find('span', class_='promotion-item__price')
                 link=variants['href'].split('#',1)[0]
                 products.append(name.text)
-                prices.append(price.text)
+                prices.append(f'${price.text}')
                 links += [link]
             if variants==None:
                 singlepagecheck=html_response_into_soup(url,requestheaders).find('li', class_='andes-pagination__page-count')
@@ -50,11 +50,11 @@ with open('meli-urls.txt','r') as f:
                                 linkclass=variants.find('a', href=True, class_='ui-search-item__group__element ui-search-link')
                         link=linkclass['href'].split('#',1)[0]
                         products.append(name.text)
-                        prices.append(price.text)
+                        prices.append(f'${price.text}')
                         links += [link]
-            filename=url.replace('https://','').replace('/','-').replace('?','-').replace('\n','')+'.csv'
+            filename=url.replace('https://','').replace('/','-').replace('?','-').replace('\n','').replace('_','-')+'.csv'
             tempdf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
-            tempdffilename=(f'new-{filename}')
+            tempdffilename=f'new-{filename}'
             if exists(filename):
                 olddf=pd.read_csv(filename, dtype={'Product':'string','Price':'string','Link':'string'})
                 tempdf.to_csv(tempdffilename, index=False)
