@@ -52,7 +52,7 @@ with open('meli-urls.txt','r') as f:
                         products.append(name.text)
                         prices.append(f'${price.text}')
                         links += [link]
-            filename=url.replace('https://','').replace('/','-').replace('?','-').replace('\n','').replace('_','-')+'.csv'
+            filename=url.replace('https://','').replace('/','-').replace('?','-').replace('\n','').replace('*','').replace('_','-')+'.csv'
             tempdf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
             tempdffilename=f'new-{filename}'
             if exists(filename):
@@ -62,9 +62,9 @@ with open('meli-urls.txt','r') as f:
                 mergeddf=olddf.merge(newdf, how='right', indicator='Exists')
                 highlights=mergeddf.query("Exists == 'right_only'")
                 if highlights.empty:
-                    print('\n*** Same items found! D: ***')
+                    print(f'\n{" Same items found! D:":#^100}')
                 else:
-                    print('\n*** New items found! :D ***')
+                    print(f'\n{" New items found! :D":#^100}')
                     highlights.drop('Exists', axis=1, inplace=True)
                     highlights.to_csv('new_items.csv', index=False)
                     mergeddf.drop('Exists', axis=1, inplace=True)
@@ -73,11 +73,11 @@ with open('meli-urls.txt','r') as f:
                     os.remove('new_items.csv')
                 os.remove(tempdffilename)
             else:
-                print('\n*** New items found! :D ***')
+                print(f'\n{" New items found! :D":#^100}')
                 tempdf.to_csv(filename, index=False)
                 subprocess.call(['notify', '-silent', '-bulk', '-i', filename])
             products.clear()
             prices.clear()
             links.clear()
         else:
-            print('*** No items listed! :O ***')
+            print(f'\n{" No items listed! :O":#^100}')
