@@ -76,7 +76,7 @@ with open('meli-urls.txt','r') as f:
             else:
                 print(f'\n{" New items found! :D ":#^100}')
                 tempdf.to_csv(filename, index=False)
-                subprocess.call(['notify', '-silent', '-i', 'new_items.csv'])
+                subprocess.call(['notify', '-silent', '-i', filename])
                 #subprocess.call(['notify', '-silent', '-bulk', '-i', filename])
             products.clear()
             prices.clear()
