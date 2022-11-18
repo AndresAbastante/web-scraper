@@ -62,9 +62,9 @@ with open('meli-urls.txt','r') as f:
                 mergeddf=olddf.merge(newdf, how='right', indicator='Exists')
                 highlights=mergeddf.query("Exists == 'right_only'")
                 if highlights.empty:
-                    print(f'\n{" Same items found! D:":#^100}')
+                    print(f'\n{" Same items found! D: ":#^100}')
                 else:
-                    print(f'\n{" New items found! :D":#^100}')
+                    print(f'\n{" New items found! :D ":#^100}')
                     highlights.drop('Exists', axis=1, inplace=True)
                     highlights.to_csv('new_items.csv', index=False)
                     mergeddf.drop('Exists', axis=1, inplace=True)
@@ -73,7 +73,7 @@ with open('meli-urls.txt','r') as f:
                     os.remove('new_items.csv')
                 os.remove(tempdffilename)
             else:
-                print(f'\n{" New items found! :D":#^100}')
+                print(f'\n{" New items found! :D ":#^100}')
                 tempdf.to_csv(filename, index=False)
                 subprocess.call(['notify', '-silent', '-bulk', '-i', filename])
             products.clear()
