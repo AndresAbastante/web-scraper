@@ -66,6 +66,7 @@ with open('meli-urls.txt','r') as f:
                 else:
                     print(f'\n{" New items found! :D ":#^100}')
                     highlights.drop('Exists', axis=1, inplace=True)
+                    #highlights.drop('Exists', axis=1)
                     highlights.to_csv('new_items.csv', index=False)
                     mergeddf.drop('Exists', axis=1, inplace=True)
                     mergeddf.to_csv(filename, index=False)
