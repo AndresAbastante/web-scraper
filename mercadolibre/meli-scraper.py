@@ -13,7 +13,8 @@ products=[]
 prices=[]
 links=[]
 meliitemsstep=48
-urlnumber=sum(1 for line in open('meli-urls.txt','r'))
+urlstxtfile='meli-urls.txt'
+urlnumber=sum(1 for line in open(urlstxtfile,'r'))
 maxitems=200
 
 def html_response_into_soup(url,requestheaders):
@@ -21,7 +22,7 @@ def html_response_into_soup(url,requestheaders):
     soup=BeautifulSoup(response, 'html.parser')
     return soup
 
-with open('meli-urls.txt','r') as f:
+with open(urlstxtfile,'r') as f:
     for url in tqdm(f, total=urlnumber, desc='Scraping sites...'):
         print('Scraping ' + url)
         noresultscheck=html_response_into_soup(url,requestheaders).find('div', class_='ui-search-rescue__info')
@@ -32,6 +33,7 @@ with open('meli-urls.txt','r') as f:
                 price=variants.find('span', class_='promotion-item__price')
                 link=variants['href'].split('#',1)[0]
                 products.append(name.text)
+                print(price)
                 prices.append(f'${price.text}')
                 links += [link]
             if variants==None:
