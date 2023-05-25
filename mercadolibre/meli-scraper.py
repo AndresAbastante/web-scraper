@@ -13,9 +13,10 @@ products=[]
 prices=[]
 links=[]
 meliitemsstep=48
-urlstxtfile='meli-urls.txt'
+urlstxtfile='meli-urls2.txt'
 urlnumber=sum(1 for line in open(urlstxtfile,'r'))
-maxitems=200
+#maxitems=200
+maxitems=48
 
 def html_response_into_soup(url,requestheaders):
 	response=(requests.get(url, requestheaders)).text
@@ -30,16 +31,15 @@ with open(urlstxtfile,'r') as f:
 			variants=None
 			for variants in html_response_into_soup(url,requestheaders).find_all('a', href=True, class_='promotion-item__link-container'):
 				name=variants.find('p', class_='promotion-item__title')
-				price=variants.find('span', class_='promotion-item__price')
+				price=variants.find('span', class_='andes-money-amount__fraction')
 				link=variants['href'].split('#',1)[0]
 				products.append(name.text)
-				print(price)
 				prices.append(f'${price.text}')
 				links += [link]
 			if variants==None:
-				singlepagecheck=html_response_into_soup(url,requestheaders).find('li', class_='andes-pagination__page-count')
-				if singlepagecheck==None:
-					maxitems=48
+				#singlepagecheck=html_response_into_soup(url,requestheaders).find('li', class_='andes-pagination__page-count')
+				#if singlepagecheck==None:
+				#	maxitems=48
 				for pages in tqdm (range (1, maxitems, meliitemsstep), desc='Scraping pages... '):
 					newurl=url + '_Desde_' + str(pages)
 					for variants in html_response_into_soup(newurl,requestheaders).find_all('div', class_='ui-search-result__wrapper'):
@@ -54,7 +54,7 @@ with open(urlstxtfile,'r') as f:
 						products.append(name.text)
 						prices.append(f'${price.text}')
 						links += [link]
-			filename=url.replace('https://','').replace('/','-').replace('?','-').replace('\n','').replace('*','').replace('_','-')+'.csv'
+			filename = f"{url.replace('https://','').split('/',2)[1].replace('?','')}.csv"
 			tempdf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
 			tempdffilename=f'new-{filename}'
 			if exists(filename):
@@ -82,4 +82,4 @@ with open(urlstxtfile,'r') as f:
 			prices.clear()
 			links.clear()
 		else:
-						print(f'\n{" No items listed! :O":#^100}')
+						print(f'\n{" No items listed! :O ":#^100}')
