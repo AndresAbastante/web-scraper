@@ -13,7 +13,7 @@ products=[]
 prices=[]
 links=[]
 meliitemsstep=48
-urlstxtfile='meli-urls2.txt'
+urlstxtfile='meli-urls.txt'
 urlnumber=sum(1 for line in open(urlstxtfile,'r'))
 #maxitems=200
 maxitems=48
@@ -54,7 +54,8 @@ with open(urlstxtfile,'r') as f:
 						products.append(name.text)
 						prices.append(f'${price.text}')
 						links += [link]
-			filename = f"{url.replace('https://','').split('/',2)[1].replace('?','')}.csv"
+			filename=url.replace('https://','').replace('?','').replace('/','-').replace('.','').replace('www','').replace('com','').replace('ar','').replace('=','').replace('_','-').replace('&','').replace('=','')
+			filename = f"{filename[:45]}.csv"
 			tempdf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
 			tempdffilename=f'new-{filename}'
 			if exists(filename):
