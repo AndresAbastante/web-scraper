@@ -32,10 +32,11 @@ with open(urlstxtfile,'r') as f:
 			for variants in html_response_into_soup(url,requestheaders).find_all('a', href=True, class_='promotion-item__link-container'):
 				name=variants.find('p', class_='promotion-item__title')
 				price=variants.find('span', class_='andes-money-amount__fraction')
-				link=variants['href'].split('#',1)[0]
-				products.append(name.text)
-				prices.append(f'${price.text}')
-				links += [link]
+				if price.text>='5000':
+					link=variants['href'].split('#',1)[0]
+					products.append(name.text)
+					prices.append(f'${price.text}')
+					links += [link]
 			if variants==None:
 				#singlepagecheck=html_response_into_soup(url,requestheaders).find('li', class_='andes-pagination__page-count')
 				#if singlepagecheck==None:
@@ -45,15 +46,16 @@ with open(urlstxtfile,'r') as f:
 					for variants in html_response_into_soup(newurl,requestheaders).find_all('div', class_='ui-search-result__wrapper'):
 						name=variants.find('h2', class_='ui-search-item__title')
 						price=variants.find('span', class_='price-tag-fraction')
-						linkclass=variants.find('a', href=True, class_='ui-search-result__content ui-search-link')
-						if linkclass==None:
-							linkclass=variants.find('a', href=True, class_='ui-search-link')
+						if price.text>='5000':
+							linkclass=variants.find('a', href=True, class_='ui-search-result__content ui-search-link')
 							if linkclass==None:
-								linkclass=variants.find('a', href=True, class_='ui-search-item__group__element ui-search-link')
-						link=linkclass['href'].split('#',1)[0]
-						products.append(name.text)
-						prices.append(f'${price.text}')
-						links += [link]
+								linkclass=variants.find('a', href=True, class_='ui-search-link')
+								if linkclass==None:
+									linkclass=variants.find('a', href=True, class_='ui-search-item__group__element ui-search-link')
+							link=linkclass['href'].split('#',1)[0]
+							products.append(name.text)
+							prices.append(f'${price.text}')
+							links += [link]
 			filename=url.replace('https://','').replace('?','').replace('/','-').replace('.','').replace('www','').replace('com','').replace('ar','').replace('=','').replace('_','-').replace('&','').replace('=','')
 			filename = f"{filename[:45]}.csv"
 			tempdf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
