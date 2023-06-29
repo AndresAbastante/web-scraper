@@ -32,7 +32,7 @@ with open(urlstxtfile,'r') as f:
 			for variants in html_response_into_soup(url,requestheaders).find_all('a', href=True, class_='promotion-item__link-container'):
 				name=variants.find('p', class_='promotion-item__title')
 				price=variants.find('span', class_='andes-money-amount__fraction')
-				if price.text>='5000':
+				if int(float(price.text.replace(".", ""))) > 5000:
 					link=variants['href'].split('#',1)[0]
 					products.append(name.text)
 					prices.append(f'${price.text}')
@@ -46,13 +46,13 @@ with open(urlstxtfile,'r') as f:
 					for variants in html_response_into_soup(newurl,requestheaders).find_all('div', class_='ui-search-result__wrapper'):
 						name=variants.find('h2', class_='ui-search-item__title')
 						price=variants.find('span', class_='price-tag-fraction')
-						if price.text>='5000':
-							linkclass=variants.find('a', href=True, class_='ui-search-result__content ui-search-link')
+						linkclass=variants.find('a', href=True, class_='ui-search-result__content ui-search-link')
+						if linkclass==None:
+							linkclass=variants.find('a', href=True, class_='ui-search-link')
 							if linkclass==None:
-								linkclass=variants.find('a', href=True, class_='ui-search-link')
-								if linkclass==None:
-									linkclass=variants.find('a', href=True, class_='ui-search-item__group__element ui-search-link')
-							link=linkclass['href'].split('#',1)[0]
+								linkclass=variants.find('a', href=True, class_='ui-search-item__group__element ui-search-link')
+						link=linkclass['href'].split('#',1)[0]
+						if int(float(price.text.replace(".", ""))) > 5000:
 							products.append(name.text)
 							prices.append(f'${price.text}')
 							links += [link]
