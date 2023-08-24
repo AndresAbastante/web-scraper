@@ -1,0 +1,31 @@
+1690805852144	geckodriver	INFO	Listening on 127.0.0.1:28865
+1690805855194	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "28866" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\Andres\\AppData\\Local\\Temp\\rust_mozprofile5C8DjI"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1690805855531	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+1690805855650	Marionette	INFO	Listening on port 28883
+WebDriver BiDi listening on ws://127.0.0.1:28866
+Read port: 28883
+1690805855899	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://127.0.0.1:28866/devtools/browser/7f60b7c1-84fe-41f0-a3ed-978f8bf11492
+1690805868592	Marionette	INFO	Stopped listening on port 28883
+Dynamically enable window occlusion 1
+[Parent 37520, IPC I/O Parent] WARNING: DuplicateHandle failed for handle 0 in TransferHandles: file /builds/worker/checkouts/gecko/ipc/chromium/src/chrome/common/ipc_channel_win.cc:793
+1690805872865	geckodriver	INFO	Listening on 127.0.0.1:28926
+1690805875890	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "28927" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\Andres\\AppData\\Local\\Temp\\rust_mozprofileDnxxn0"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1690805876143	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+1690805876225	Marionette	INFO	Listening on port 28937
+WebDriver BiDi listening on ws://127.0.0.1:28927
+Read port: 28937
+1690805876414	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://127.0.0.1:28927/devtools/browser/d4c45548-2956-4d86-b0ca-d432be199b13
+JavaScript error: https://www.tcgplayer.com/js/780.cb5581a0.js, line 1: TypeError: t is undefined
+[Parent 44636, IPC I/O Parent] WARNING: DuplicateHandle failed for handle 0 in TransferHandles: file /builds/worker/checkouts/gecko/ipc/chromium/src/chrome/common/ipc_channel_win.cc:793
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://www.tcgplayer.com."
+1690805900228	Marionette	INFO	Stopped listening on port 28937
+Dynamically enable window occlusion 1
+[Parent 44636, IPC I/O Parent] WARNING: DuplicateHandle failed for handle 0 in TransferHandles: file /builds/worker/checkouts/gecko/ipc/chromium/src/chrome/common/ipc_channel_win.cc:793
