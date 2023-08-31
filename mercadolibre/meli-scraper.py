@@ -26,7 +26,9 @@ with open(urlstxtfile,'r') as f:
 	for url in tqdm(f, total=urlnumber, desc='Scraping sites...'):
 		print('Scraping ' + url)
 		noresultscheck=html_response_into_soup(url,requestheaders).find('div', class_='ui-search-rescue__info')
-		if noresultscheck==None:
+		if noresultscheck!=None:
+			print(f'\n{" No items listed! :O ":#^100}')
+		else:
 			pagescheck=html_response_into_soup(url,requestheaders).find('li', class_='andes-pagination__page-count')
 			if pagescheck==None:
 					pageammount=1
@@ -36,9 +38,7 @@ with open(urlstxtfile,'r') as f:
 				newurl=url + '_Desde_' + str(page * meliitemsstep)
 				variants=None
 				for variants in html_response_into_soup(newurl,requestheaders).find_all('div', class_='ui-search-result__wrapper shops__result-wrapper'):
-					print("caso A")
 					price=variants.find('span', class_='andes-money-amount__fraction')
-					print(int(float(price.text.replace(".", ""))))
 					if int(float(price.text.replace(".", ""))) > pricefilter:
 						name=variants.find('h2', class_='ui-search-item__title')
 						linkclass=variants.find('a', href=True, class_='ui-search-link')
@@ -48,7 +48,6 @@ with open(urlstxtfile,'r') as f:
 						links += [link]
 				if variants==None:
 					for variants in html_response_into_soup(newurl,requestheaders).find_all('a', href=True, class_='promotion-item__link-container'):
-						print("caso B")
 						name=variants.find('p', class_='promotion-item__title')
 						price=variants.find('span', class_='andes-money-amount__fraction')
 						if int(float(price.text.replace(".", ""))) > pricefilter:
@@ -58,7 +57,6 @@ with open(urlstxtfile,'r') as f:
 							links += [link]
 						if variants==None:
 							for variants in html_response_into_soup(newurl,requestheaders).find_all('div', class_='ui-search-result__wrapper'):
-								print("caso C")
 								name=variants.find('h2', class_='ui-search-item__title')
 								price=variants.find('span', class_='price-tag-fraction')
 								linkclass=variants.find('a', href=True, class_='ui-search-result__content ui-search-link')
@@ -99,5 +97,3 @@ with open(urlstxtfile,'r') as f:
 			products.clear()
 			prices.clear()
 			links.clear()
-		else:
-						print(f'\n{" No items listed! :O ":#^100}')
