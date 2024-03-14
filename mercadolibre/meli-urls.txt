@@ -3,3 +3,4 @@ https://autos.mercadolibre.com.ar/407-coupe_PublishedToday_YES_OrderId_PRICE
 https://inmuebles.mercadolibre.com.ar/departamentos/venta/bsas-gba-oeste/tres-de-febrero/martin-coronado-o-ciudad-jardin-lomas-del-palomar-o-santos-lugares-o-saenz-pena-o-villa-bosch-o-villa-raffo/_PriceRange_0USD-50000USD_PublishedToday_YES
 https://autos.mercadolibre.com.ar/volvo/s60_NoIndex_True_PublishedToday_YES_OrderId_PRICE
 https://autos.mercadolibre.com.ar/seat/Leon_OrderId_PRICE_PublishedToday_YES_NoIndex_True
+https://autos.mercadolibre.com.ar/honda/2008-2012/crv_OrderId_PRICE_PublishedToday_YES_NoIndex_True
