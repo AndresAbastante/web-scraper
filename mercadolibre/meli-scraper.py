@@ -15,7 +15,7 @@ meliitemsstep=48
 urlstxtfile='meli-urls.txt'
 urlnumber=sum(1 for line in open(urlstxtfile,'r'))
 maxitems=48
-pricefilter=3500
+pricefilter=10000
 
 def html_response_into_soup(url,requestheaders):
 	response=(requests.get(url, requestheaders)).text
