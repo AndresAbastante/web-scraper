@@ -41,9 +41,19 @@ with open(urlstxtfile,'r') as f:
 					print("for " + newurl + " filter is ui-search-result__wrapper shops__result-wrapper")
 					price=variants.find('span', class_='andes-money-amount__fraction')
 					if int(float(price.text.replace(".", ""))) > pricefilter:
+						link=linkclass['href'].split('#',1)[0]
+						description=html_response_into_soup(link,requestheaders).find('p', class_='ui-pdp-description__content')
+						print(description)
+						if description!=None:
+							print(description)
+							print("************")
+							if "ANTICIPO" not in description.text:
+								exclusion="true"
+							else:
+								exclusion="false"
+							print(exclusion)
 						name=variants.find('h2', class_='ui-search-item__title')
 						linkclass=variants.find('a', href=True, class_='ui-search-link')
-						link=linkclass['href'].split('#',1)[0]
 						products.append(name.text)
 						prices.append(f'${price.text}')
 						links += [link]
@@ -53,6 +63,16 @@ with open(urlstxtfile,'r') as f:
 						if int(float(price.text.replace(".", ""))) > pricefilter:
 							name=variants.find('p', class_='promotion-item__title')
 							link=variants['href'].split('#',1)[0]
+							description=html_response_into_soup(link,requestheaders).find('p', class_='ui-pdp-description__content')
+							print(description)
+							if description!=None:
+								print(description)
+								print("************")
+								if "ANTICIPO" in description.text:
+									exclusion="true"
+								else:
+									exclusion="false"
+								print(exclusion)
 							products.append(name.text)
 							prices.append(f'${price.text}')
 							links += [link]
@@ -60,6 +80,7 @@ with open(urlstxtfile,'r') as f:
 					for variants in html_response_into_soup(newurl,requestheaders).find_all('div', class_='ui-search-result__wrapper'):
 						price=variants.find('span', class_='andes-money-amount__fraction')
 						if int(float(price.text.replace(".", ""))) > pricefilter:
+							
 							name=variants.find('h2', class_='ui-search-item__title')
 							linkclass=variants.find('a', href=True, class_='ui-search-result__content ui-search-link')
 							if linkclass==None:
@@ -67,6 +88,16 @@ with open(urlstxtfile,'r') as f:
 								if linkclass==None:
 									linkclass=variants.find('a', href=True, class_='ui-search-item__group__element ui-search-link')
 							link=linkclass['href'].split('#',1)[0]
+							description=html_response_into_soup(link,requestheaders).find('p', class_='ui-pdp-description__content')
+							print(description)
+							if description!=None:
+								print(description)
+								print("************")
+								if "ANTICIPO" in description.text:
+									exclusion="true"
+								else:
+									exclusion="false"
+								print(exclusion)
 							products.append(name.text)
 							prices.append(f'${price.text}')
 							links += [link]
