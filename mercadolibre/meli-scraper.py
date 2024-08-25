@@ -31,63 +31,56 @@ with open(urlstxtfile,'r') as f:
 		else:
 			pagescheck=html_response_into_soup(url,requestheaders).find('li', class_='andes-pagination__page-count')
 			if pagescheck==None:
-					pageammount=1
+				pageammount=1
 			else:
-					pageammount=int(pagescheck.text.split(" ")[1])
+				pageammount=int(pagescheck.text.split(" ")[1])
+			print("pageamount")
+			print(pageammount)
 			for page in tqdm (range (pageammount), desc='Scraping pages... '):
 				newurl=url + '_Desde_' + str(page * meliitemsstep)
 				variants=None
-				for variants in html_response_into_soup(newurl,requestheaders).find_all('div', class_='ui-search-result__wrapper shops__result-wrapper'):
+				for variants in html_response_into_soup(newurl,requestheaders).find_all('div', class_='ui-search-result__wrapper'):
+					if variants==None:
+						break
 					print("for " + newurl + " filter is ui-search-result__wrapper shops__result-wrapper")
 					price=variants.find('span', class_='andes-money-amount__fraction')
 					if int(float(price.text.replace(".", ""))) > pricefilter:
-						link=linkclass['href'].split('#',1)[0]
+						linkclass=variants.find('a', href=True, class_='poly-component__title')
+						link=linkclass['href'].split('-_JM#',1)[0]
+						name=variants.find('h2', class_='poly-box')
+						products.append(name.text)
+						prices.append(f'${price.text}')
+						links += [link]
+				for variants in html_response_into_soup(newurl,requestheaders).find_all('a', href=True, class_='promotion-item__link-container'):
+					if variants==None:
+						break
+					price=variants.find('span', class_='andes-money-amount__fraction')
+					if int(float(price.text.replace(".", ""))) > pricefilter:
+						name=variants.find('p', class_='promotion-item__title')
+						link=variants['href'].split('#',1)[0]
 						description=html_response_into_soup(link,requestheaders).find('p', class_='ui-pdp-description__content')
 						print(description)
 						if description!=None:
 							print(description)
 							print("************")
-							if "ANTICIPO" not in description.text:
-								exclusion="true"
-							else:
-								exclusion="false"
-							print(exclusion)
-						name=variants.find('h2', class_='ui-search-item__title')
-						linkclass=variants.find('a', href=True, class_='ui-search-link')
 						products.append(name.text)
 						prices.append(f'${price.text}')
 						links += [link]
-				if variants==None:
-					for variants in html_response_into_soup(newurl,requestheaders).find_all('a', href=True, class_='promotion-item__link-container'):
+					for variants in html_response_into_soup(newurl,requestheaders).find_all('div', class_='ui-search-result__wrapper shops__result-wrapper'):
 						price=variants.find('span', class_='andes-money-amount__fraction')
 						if int(float(price.text.replace(".", ""))) > pricefilter:
-							name=variants.find('p', class_='promotion-item__title')
-							link=variants['href'].split('#',1)[0]
-							description=html_response_into_soup(link,requestheaders).find('p', class_='ui-pdp-description__content')
-							print(description)
-							if description!=None:
-								print(description)
-								print("************")
-								if "ANTICIPO" in description.text:
-									exclusion="true"
-								else:
-									exclusion="false"
-								print(exclusion)
-							products.append(name.text)
-							prices.append(f'${price.text}')
-							links += [link]
-				if variants==None:
-					for variants in html_response_into_soup(newurl,requestheaders).find_all('div', class_='ui-search-result__wrapper'):
-						price=variants.find('span', class_='andes-money-amount__fraction')
-						if int(float(price.text.replace(".", ""))) > pricefilter:
-							
-							name=variants.find('h2', class_='ui-search-item__title')
+							name=variants.find('h2', class_='poly-box')
+							print(name)
 							linkclass=variants.find('a', href=True, class_='ui-search-result__content ui-search-link')
 							if linkclass==None:
-								linkclass=variants.find('a', href=True, class_='ui-search-link')
-								if linkclass==None:
-									linkclass=variants.find('a', href=True, class_='ui-search-item__group__element ui-search-link')
-							link=linkclass['href'].split('#',1)[0]
+								linkclass=variants.find('a', href=True, class_='poly-component__title')
+							if linkclass==None:
+								linkclass=variants.find('a', href=True, class_='ui-search-item__group__element ui-search-link')
+							print("************")
+							print(linkclass)
+							link=linkclass['href'].split('-_JM#',1)[0]
+							print("************")
+							print(linkclass)
 							description=html_response_into_soup(link,requestheaders).find('p', class_='ui-pdp-description__content')
 							print(description)
 							if description!=None:
