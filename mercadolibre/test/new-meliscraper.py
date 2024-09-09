@@ -22,6 +22,17 @@ def html_response_into_soup(url,requestheaders):
 	soup=BeautifulSoup(response, 'html.parser')
 	return soup
 
+def pull_publication_values():
+ global links
+ price=variants.find('span', class_='andes-money-amount__fraction')
+ if int(float(price.text.replace(".", ""))) > pricefilter:
+  linkclass=variants.find('a', href=True, class_='poly-component__title')
+  link=linkclass['href'].split('-_JM#',1)[0]
+  name=variants.find('h2', class_='poly-box')
+  products.append(name.text)
+  prices.append(f'${price.text}')
+  links += [link]
+
 with open(urlstxtfile,'r') as f:
 	for url in tqdm(f, total=urlnumber, desc='Scraping sites...'):
 		print('Scraping ' + url)
@@ -31,27 +42,18 @@ with open(urlstxtfile,'r') as f:
 		else:
 			pagescheck=html_response_into_soup(url,requestheaders).find('li', class_='andes-pagination__page-count')
 			if pagescheck==None:
-				pageammount=1
+				pageamount=1
 			else:
-				pageammount=int(pagescheck.text.split(" ")[1])
-			print("pageamount")
-			print(pageammount)
-			for page in tqdm (range (pageammount), desc='Scraping pages... '):
+				pageamount=int(pagescheck.text.split(" ")[1])
+			for page in tqdm (range (pageamount), desc='Scraping pages... '):
 				newurl=url + '_Desde_' + str(page * meliitemsstep)
 				variants=None
 				for variants in html_response_into_soup(newurl,requestheaders).find_all('div', class_='ui-search-result__wrapper'):
-					if variants==None:
-						break
-					print("for " + newurl + " filter is ui-search-result__wrapper")
-					price=variants.find('span', class_='andes-money-amount__fraction')
-					if int(float(price.text.replace(".", ""))) > pricefilter:
-						linkclass=variants.find('a', href=True, class_='')
-						link=linkclass['href'].split('-_JM#',1)[0]
-						print(link)
-						name=variants.find('h2', class_='poly-box')
-						products.append(name.text)
-						prices.append(f'${price.text}')
-						links.append(link)
+					pull_publication_values()
+				for variants in html_response_into_soup(newurl,requestheaders).find_all('a', href=True, class_='promotion-item__link-container'):
+					pull_publication_values()
+				for variants in html_response_into_soup(newurl,requestheaders).find_all('div', class_='ui-search-result__wrapper shops__result-wrapper'):
+					pull_publication_values() 
 			filename=url.replace('https://','').replace('?','').replace('/','-').replace('.','').replace('www','').replace('com','').replace('ar','').replace('=','').replace('_','-').replace('&','').replace('=','')
 			filename = f"{filename[:45]}.csv"
 			tempdf=pd.DataFrame({'Product':products, 'Price':prices, 'Link':links})
