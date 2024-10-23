@@ -80,6 +80,9 @@ async def scraper(resp):
     year = 'Null'
     kms = 'Null'
     title = 'Null'
+    description = 'Null'
+    price = 'Null'
+    zone = 'Null'
   finally:
     return title, year, kms, description, price, zone
    
@@ -102,13 +105,13 @@ async def main():
       print(row['links'])
       async with session.get(row['links']) as resp:
         try:
-          title, year, kms, description, price, zone  = await scraper(resp)
-          zones.append(zone)
+          title, year, kms, price, zone, description = await scraper(resp)
           titles.append(title)
           years.append(year)
           kmss.append(kms)
           urls.append(row['links'])
           prices.append(price)
+          zones.append(zone)
           descriptions.append(description)
         except UnboundLocalError:
           logging.error ("puto")
