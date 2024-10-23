@@ -34,12 +34,10 @@ async def main():
             for link in csvreader:
                 async with session.get(link['links']) as resp:
                     title, year, kms,  = await scraper(resp)
-                    print(title)
                     titles.append(title)
                     years.append(year)
                     kmss.append(kms)
                     links2.append(link)
             resultsdf=pd.DataFrame({'title':titles, 'year':years, 'kmss':kmss})
             resultsdf.to_csv('results.csv', index=False)
-
 asyncio.run(main())

@@ -11,7 +11,7 @@ import pandas as pd
 import csv
 ##-----##
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-titles = []; links = []; tasks = []; years = []; kmss = []; links2 = []; descriptions = []
+zones = []; prices = []; titles = []; links = []; tasks = []; years = []; kmss = []; urls = []; descriptions = []
 oldcsv = "old_links.csv"
 highlightscsv = "highlights.csv"
 headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36'}
@@ -63,7 +63,10 @@ async def scraper(resp):
     header = soup.find('div', class_='ui-pdp-container__col col-2 ui-vip-core-container--short-description ui-vip-core-container--column__right')
     yearkms = header.find('span', class_='ui-pdp-subtitle')
     title = header.find('h1', class_='ui-pdp-title').text
-    description = soup.find('p', class_='ui-pdp-description__content')
+    price_element = header.find('span', class_='andes-money-amount')
+    price = price_element['aria-label']
+    zone = soup.find('span', class_='ui-pdp-color--BLACK ui-pdp-size--SMALL ui-pdp-family--SEMIBOLD').text
+    description = soup.find('p', class_='ui-pdp-description__content').text
     pattern = re.compile(r'(\d{4})\s*\|\s*([\d\.]+)\s*km')
     match = pattern.search(str(yearkms))
     if match and title:
@@ -78,7 +81,7 @@ async def scraper(resp):
     kms = 'Null'
     title = 'Null'
   finally:
-    return title, year, kms, description
+    return title, year, kms, description, price, zone
    
 async def main():
   link = "https://autos.mercadolibre.com.ar/dueno-directo/_OrderId_PRICE_PublishedToday_YES_NoIndex_True"
@@ -99,17 +102,19 @@ async def main():
       print(row['links'])
       async with session.get(row['links']) as resp:
         try:
-          title, year, kms, description  = await scraper(resp)
+          title, year, kms, description, price, zone  = await scraper(resp)
+          zones.append(zone)
           titles.append(title)
           years.append(year)
           kmss.append(kms)
-          links2.append(row['links'])
+          urls.append(row['links'])
+          prices.append(price)
           descriptions.append(description)
         except UnboundLocalError:
           logging.error ("puto")
     mergeddf.drop('Exists', axis=1, inplace=True)
     newlinksdf.to_csv(oldcsv, index=False)
-    highlightsdf = pd.DataFrame({'title':titles, 'year':years, 'kms':kmss, 'links':links2, 'descriptions':descriptions})
+    highlightsdf = pd.DataFrame({'título':titles, 'año':years, 'kms':kmss, 'link':urls, 'precio':prices, 'zona':zones, 'descripción':descriptions})
     highlightsdf.to_csv(highlightscsv, index=False)
     
 asyncio.run(main())
