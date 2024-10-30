@@ -81,6 +81,7 @@ async def scraper(resp):
     km = 'Null'
     title = 'Null'
     description = 'Null'
+    #description = 'Null'
     price = 'Null'
     zone = 'Null'
   finally:
