@@ -40,10 +40,10 @@ with open(urlstxtfile,'r') as f:
 					if variants==None:
 						break
 					price=variants.find('span', class_='andes-money-amount__fraction')
-					linkclass=variants.find('a', href=True, class_='')
+					linkclass=variants.find('a', href=True, class_='poly-component__title')
 					link=linkclass['href'].split('-_JM#',1)[0]
-					name=variants.find('h2', class_='poly-box')
-					products.append(name.text)
+					#name=variants.find('h2', class_='poly-box')
+					products.append(linkclass.text)
 					prices.append(f'${price.text}')
 					links.append(link)
 			filename=url.replace('https://','').replace('?','').replace('/','-').replace('.','').replace('www','').replace('com','').replace('ar','').replace('=','').replace('_','-').replace('&','').replace('=','').replace('*','')
